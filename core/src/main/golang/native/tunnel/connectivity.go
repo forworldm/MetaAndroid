@@ -22,20 +22,7 @@ func HealthCheck(name string) {
 
 	g, ok := p.Adapter().(outboundgroup.ProxyGroup)
 	if !ok {
-		testURL := "https://www.gstatic.com/generate_204"
-		for k := range p.ExtraDelayHistories() {
-			if len(k) > 0 {
-				testURL = k
-				break
-			}
-		}
-
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-
-		if _, err := p.URLTest(ctx, testURL, nil); err != nil && ctx.Err() == nil {
-			log.Warnln("Request health check for `%s`: %s", name, err.Error())
-		}
+		log.Warnln("Request health check for `%s`: invalid type %s", name, p.Type().String())
 
 		return
 	}
